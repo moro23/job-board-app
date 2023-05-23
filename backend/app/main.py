@@ -1,15 +1,18 @@
-from turtle import title
 ## lets import our project libraries
 from fastapi import FastAPI
 from core.config import settings
+from apis.general_pages.route_homepage import general_pages_router
 
-## lets create an instance of our fastapi app 
-## lets also init with the project title and version
-app = FastAPI(title=settings.PROJECT_NAME, version=settings.PROJECT_VERSION)
+def include_router(app):
+    app.include_router(general_pages_router)
 
-## lets create a decorator with an endpoint
-@app.get("/")
+def start_application():
+    ## lets create an instance of our fastapi app 
+    ## lets also init with the project title and version
+    app = FastAPI(title=settings.PROJECT_NAME, version=settings.PROJECT_VERSION)
+    include_router(app)
+    return app
 
-## lets create a function to display a simple message
-def hello_api():
-    return {"msg": "Hello API"}
+app = start_application()
+
+
