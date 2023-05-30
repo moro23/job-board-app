@@ -13,3 +13,25 @@
 
 ## Technology Stack
 <img src="tech_stack.jpg" alt="Alt text" title="Optional title">
+
+
+## Environment Configuration
+- Setting up project Env using the following:
+    - pip install pipenv 
+    - pipenv install fastapi uvicorn
+- Create a simple Fastapi app
+    - mkdir app 
+    - touch app/main.py
+- Running the app 
+    - uvicorn app.main:app --reload
+
+- Create a Dockerfile to run the app
+    - Dockerfile
+    - Build the docker image 
+        - docker build . 
+- Create the docker-compose file to run 
+    - Build the docker-compose file
+        - To run fastapi app, postgres, pgadmin
+        - docker-compose build
+        - docker-compuse up
+   
