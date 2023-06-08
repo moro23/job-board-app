@@ -20,13 +20,13 @@ class CreateJob(JobBase):
 class ShowJob(JobBase):
     title : str 
     company : str 
-    company_url : str
+    company_url : Optional[str]
     location : str 
     date_posted : date 
     description : Optional[str] 
 
     ## lets convert non dict obj to json
     class Config():
-        orm_model = True
+        orm_mode = True
 
 
