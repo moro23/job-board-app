@@ -16,6 +16,7 @@ passlib = {extras = ["bcrypt"], version = "*"}
 pytest = "*"
 requests = "*"
 httpx = "*"
+python-jose = "*"
 
 [dev-packages]
 
