@@ -17,6 +17,12 @@ class CreateJob(JobBase):
     location: str 
     description: str 
 
+class UpdateJob(JobBase):
+    title : str 
+    company: str 
+    location: str 
+    description: str 
+
 class ShowJob(JobBase):
     title : str 
     company : str 
