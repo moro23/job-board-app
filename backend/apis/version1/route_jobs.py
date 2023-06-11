@@ -8,7 +8,10 @@ from fastapi import Depends, HTTPException, status
 from db.session import get_db
 from db.models.jobs import Job
 from schemas.jobs import CreateJob, ShowJob
-from db.repository.jobs import create_new_job, retreive_job, list_jobs, update_job_by_id, delete_job_by_id
+from db.repository.jobs import create_new_job, retreive_job, list_jobs, update_job_by_id, delete_job_by_id 
+
+from db.models.users import User 
+from apis.version1.route_login import get_current_user_from_token 
 
 router = APIRouter()
 
@@ -42,10 +45,14 @@ def update_job(id:int, job: CreateJob, db:Session = Depends(get_db)):
     return {"msg": "Successfully updated data."}
 
 @router.delete("/get/{id}", response_model=ShowJob)
-def delete_job(id:int, db: Session = Depends(get_db)):
-    current_user_id = 1
-    message = delete_job_by_id(id=id, db=db, owner_id=current_user_id)
-    if not message:
+def delete_job(id:int, db: Session = Depends(get_db), current_user: User = Depends(get_current_user_from_token)):
+    ## lets validate the user
+    job = retreive_job(id=id, db=db)
+    if not job:
+        return HTTPException(status_code=status.HTTP_404_NOT_FOUND,detail=f"Job with {id} does not exist")
+    print(job.owner_id, current_user.id, current_user.is_superuser)
+    if job.owner_id == current_user.id or current_user.is_superuser:
+        delete_job_by_id(id=id, db=db, owner_id=current_user.id)
+        return {"msg": "Successfully deleted"}
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, 
         detail=f"Job with id {id} not found.")
-    return {"msg": "Successfully deleted."}
