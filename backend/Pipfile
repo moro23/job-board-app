@@ -17,6 +17,7 @@ pytest = "*"
 requests = "*"
 httpx = "*"
 python-jose = "*"
+python-multipart = "*"
 
 [dev-packages]
 
