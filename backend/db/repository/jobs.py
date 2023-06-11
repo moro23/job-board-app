@@ -33,7 +33,7 @@ def update_job_by_id(id:int, job: CreateJob, db: Session, owner_id):
     return 1
 
 def delete_job_by_id(id:int, job: CreateJob, db: Session, owner_id):
-    existing_job = db.query(Job),filter(Job.id == id)
+    existing_job = db.query(Job).filter(Job.id == id)
     if not existing_job:
         return 0
     existing_job.delete(synchronize_session=False)
