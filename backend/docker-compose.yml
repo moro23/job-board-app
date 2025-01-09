@@ -1,0 +1,64 @@
+version: '3.8'
+
+services: 
+
+  pgdatabase:
+    image: postgres:15 
+    container_name: postgres_container
+    restart: always
+    volumes: 
+      - postgres-data:/var/lib/postgresql/data
+    ports:
+      - 5433:5432
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: job_board_db 
+    networks: 
+      - my_network
+    
+  pgadmin:
+    image: dpage/pgadmin4 
+    container_name: pgadmin_container
+    restart: always 
+    env_file:
+      - .env
+    environment:
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD}
+    depends_on:
+      - pgdatabase   
+    ports:
+      - 8080:80 
+    networks:
+      - my_network
+
+  web:
+    build: .
+    ports:
+      - "8000:80"
+    volumes: 
+      - .:/code 
+    env_file:
+      - .env
+    environment:
+      DATABASE_URL: "postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@${POSTGRES_SERVER}:${POSTGRES_PORT}/${POSTGRES_DB}"
+    restart: always
+    depends_on:
+      - pgdatabase  
+    networks:
+      - my_network
+
+networks:
+  my_network:
+    driver: bridge
+
+
+volumes:
+  postgres-data: 
+    driver: local
+  pgadmin-data:
+    driver: local
+
+
+
